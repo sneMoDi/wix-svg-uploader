@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 
 type AllowedMime = 'image/svg+xml' | 'image/webp';
-
 const ALLOWED_TYPES: AllowedMime[] = ['image/svg+xml', 'image/webp'];
 
 function App() {
@@ -73,24 +72,21 @@ function App() {
       return;
     }
 
-    // Stubbed message for Wix Editor Add-On panel integration:
-    // In the Wix Editor, listen for this postMessage to insert the element.
+    // Send a message to the Wix Editor host
     const payload = {
       type: 'WIX_PLUGIN_INSERT_IMAGE',
       fileName,
       fileType,
       dataUrl: imageDataUrl,
-      // You can add metadata here (e.g., width/height) if needed.
     };
 
     window.parent?.postMessage(payload, '*');
   };
 
   useEffect(() => {
-    // Optional: Listen for messages from the Wix Editor host (stub).
-    const handler = (_event: MessageEvent) => {
-      // You can handle callbacks or acknowledgements here.
-      // console.log('Message from host:', event.data);
+    // Optional: listen for messages back from the Wix Editor host
+    const handler = (event: MessageEvent) => {
+      console.log('Message from host:', event.data);
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
