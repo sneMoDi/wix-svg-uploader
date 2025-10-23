@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { editor } from '@wix/editor-sdk';   // ✅ Import the Wix Editor SDK
 import './App.css';
 
 type AllowedMime = 'image/svg+xml' | 'image/webp';
@@ -68,24 +67,22 @@ function App() {
   const openFilePicker = () => fileInputRef.current?.click();
 
   const insertToWixEditor = () => {
-    if (!imageDataUrl || !fileName || !fileType) {
-      setError('No image selected.');
-      return;
-    }
+  if (!imageDataUrl || !fileName || !fileType) {
+    setError('No image selected.');
+    return;
+  }
 
-    // ✅ Directly insert the image into the Wix Editor canvas
-    editor.addComponent({
-      type: 'Image',
-      data: {
-        src: imageDataUrl,
-        name: fileName,
-      },
-      style: {
-        width: 200,
-        height: 200,
-      }
-    });
+  const payload = {
+    type: 'WIX_PLUGIN_INSERT_IMAGE',
+    fileName,
+    fileType,
+    dataUrl: imageDataUrl,
   };
+
+  console.log("Sending payload to Wix host:", payload);
+  window.parent?.postMessage(payload, '*');
+};
+
 
   useEffect(() => {
     // Optional: listen for messages back from the Wix Editor host
