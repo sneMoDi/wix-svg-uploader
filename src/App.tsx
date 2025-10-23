@@ -84,7 +84,6 @@ function App() {
     };
 
     window.parent?.postMessage(payload, '*');
-    alert(`Pretending to insert "${fileName}" into Wix Editor.`);
   };
 
   useEffect(() => {
