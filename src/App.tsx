@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { editor } from '@wix/editor-sdk';   // ✅ Import the Wix Editor SDK
 import './App.css';
 
 type AllowedMime = 'image/svg+xml' | 'image/webp';
@@ -72,15 +73,18 @@ function App() {
       return;
     }
 
-    // Send a message to the Wix Editor host
-    const payload = {
-      type: 'WIX_PLUGIN_INSERT_IMAGE',
-      fileName,
-      fileType,
-      dataUrl: imageDataUrl,
-    };
-
-    window.parent?.postMessage(payload, '*');
+    // ✅ Directly insert the image into the Wix Editor canvas
+    editor.addComponent({
+      type: 'Image',
+      data: {
+        src: imageDataUrl,
+        name: fileName,
+      },
+      style: {
+        width: 200,
+        height: 200,
+      }
+    });
   };
 
   useEffect(() => {
